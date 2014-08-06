@@ -15,10 +15,10 @@
 .typeahead,
 .tt-query,
 .tt-hint {
-    width: 592px;
+    width: 300px;
     height: 30px;
     padding: 4px 12px;
-    font-size: 18px;
+    /*font-size: 18px;*/
     line-height: 30px;
     border: 2px solid #ccc;
     -webkit-border-radius: 8px;
@@ -46,7 +46,7 @@
 }
 
 .tt-dropdown-menu {
-    width: 592px;
+    width: 300px;
     margin-top: 12px;
     padding: 8px 0;
     background-color: #fff;
@@ -62,7 +62,7 @@
 
 .tt-suggestion {
     padding: 3px 20px;
-    font-size: 18px;
+    /*font-size: 18px;*/
     line-height: 24px;
 }
 

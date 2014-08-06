@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="步步封神管理工具">
-
     <meta name="author" content="刘老爷 <185938@qq.com>">
 
     <title>
@@ -39,41 +38,11 @@
     <script type="text/javascript" src="./js/urlParams.js"></script>
     <script type="text/javascript" src="./js/base.js"></script>
     <script type="text/javascript" src="./js/typeahead.js/typeahead.bundle.min.js"></script>
-
     <script>
+
+
         $(document).ready(function ($) {
-            $.getScript(host + "ExcelFile", function () {
-                $('#excel').typeahead({
-                    hint: true,
-                    highlight: true,
-                    minLength: 1
-                },
-                {
-                    name: 'states',
-                    displayKey: 'value',
-                    source: substringMatcher(excelName)
-                });
-                $('#excel').on(
-                    'typeahead:selected',
-                    function ($e) {
-                    var args = [].slice.call(arguments, 1);
-                    //text = window.JSON ? JSON.stringify(args) : '';
-                    var item = args[0].value;
-                    window.open('http://192.168.1.55:8080/%E6%89%8B%E6%9C%BA%E6%95%B0%E5%80%BC/' + item);
-                });
 
-            });
-
-            $.getScript(host + "ServerInfo", function () {
-
-                $('#serverName').text(serverName);
-                $('#gameId').text(gameId);
-                $('#gmPort').text(gmPort);
-                $('#port').text(port);
-                $('#dbPath').text(dbPath);
-                $('#erating').text(erating);
-                $('#rechargePort').text(rechargePort);
-            });
 
             $.getScript(host + "PropId2Name", function () {
                 $('#propId2Name').typeahead({
@@ -82,14 +51,37 @@
                             minLength: 1
                         },
                         {
-                            name: 'states',
+                            name: 'prop',
                             displayKey: 'value',
                             source: substringMatcher(propName)
                         });
             });
+
+            $("#changePlayerInfoBut").click(function () {
+                $("#changePlayerInfoResult").html( "<h4 class='bg-info'>正在提交，请耐心等候。。。。</h4>" );
+//
+                var changePlayerInfoUrl = host + "ChangePlayerInfo?";
+                changePlayerInfoUrl += "user_id=" + $("#user").val();
+                changePlayerInfoUrl += "&propId=" + $("#propId2Name").val().substr(0,6);
+                changePlayerInfoUrl += "&count=" + $("#count").val();
+//                alert(changePlayerInfoUrl);
+                $.ajax({
+                    cache:false,
+                    dataType:"html",
+                    url: changePlayerInfoUrl,
+                    success: function(html){
+                        $("#changePlayerInfoResult").html(html);
+
+                    },
+                    error: function(XMLHttpRequest , textStatus , errorThrown ){
+                        $("#changePlayerInfoResult").html( "<h4 class='bg-danger'>出错啦，请检查" + changePlayerInfoUrl +"是否可访问！</h4>");
+                    }
+                });
+            });
         });
 
     </script>
+
 
 </head>
 <body>
@@ -102,10 +94,10 @@
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
-                <li class="active">
+                <li>
                     <a href="./data.html">数据查询</a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="./manager.html">数据管理</a>
                 </li>
                 <li>
@@ -130,9 +122,8 @@
 <!-- Docs page layout -->
 <div class="bs-docs-header" id="content">
     <div class="container">
-        <h1>数据查询</h1>
-
-        <p>这是一个对游戏进行全方位管理的web平台</p>
+        <h1>玩家信息</h1>
+        <p>管理玩家的个人信息，包括查询和修改</p>
 
     </div>
 </div>
@@ -142,78 +133,74 @@
     <div class="row">
         <div class="col-md-9" role="main">
             <div class="bs-docs-section">
-                <h1 id="serverInfo" class="page-header">服务器配置</h1>
+                <h1 id="playerInfo" class="page-header">玩家属性</h1>
 
+                <div class="row">
+                    <div class="col-xs-8">
+                        <input id="user" type="text" placeholder="请输入玩家的用户名或昵称" class="form-control " >
+                    </div>
+                    <div class="col-xs-3">
+                        <button type="button" class="btn btn-sm btn-success" id="searchUserBut">提交</button>
+                    </div>
+
+                </div>
+
+                <br><br>
                 <table class="table table-striped">
 
-                    <thead>
-                    <tr>
-                        <th>名称</th>
-                        <th width="60%">值</th>
-                    </tr>
-                    </thead>
+
                     <tbody>
                     <tr>
-                        <td>服务器ID</td>
-                        <td id="gameId"></td>
+                        <td>昵称</td>
+                        <td id="gameId">刘老爷</td>
                     </tr>
                     <tr>
-                        <td>服务器名称</td>
-                        <td id="serverName"></td>
+                        <td>经验</td>
+                        <td id="serverName">64645435</td>
                     </tr>
                     <tr>
-                        <td>玩家登陆端口</td>
-                        <td id="port"></td>
+                        <td>等级</td>
+                        <td id="port">54</td>
                     </tr>
-                    <tr>
-                        <td>充值端口</td>
-                        <td id="rechargePort"></td>
-                    </tr>
-                    <tr>
-                        <td>管理端口</td>
-                        <td id="gmPort"></td>
-                    </tr>
-                    <tr>
-                        <td>数据库路径</td>
-                        <td id="dbPath"></td>
-                    </tr>
-                    <tr>
-                        <td>erating</td>
-                        <td id="erating"></td>
-                    </tr>
+
 
                     </tbody>
                 </table>
             </div>
 
             <div class="bs-docs-section">
-                <h1 id="excelSearch" class="page-header">配置表查询</h1>
-                <input id="excel" class="typeahead" type="text" placeholder="请输入excel关键字">
+                <h1 id="changeplayerInfo" class="page-header">数据修改</h1>
+
+
+                <form class="form-inline" role="form">
+                    <div class="col-xs-8">
+                        <input id="propId2Name" type="text" placeholder="请输入物品或者ID关键字" class="form-control " >
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="input-group">
+                            <div class="input-group-addon">@</div>
+                            <input id="count" type="text" class="form-control" placeholder="请输入物品的数量">
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                        <button type="button" class="btn btn-sm btn-success" id="changePlayerInfoBut">提交</button>
+                    </div>
+                </form>
+                <br><br>
+                <div class="col-xs-12" id="changePlayerInfoResult"></div>
             </div>
-
-
-            <div class="bs-docs-section">
-                <h1 id="propId2NameSearch" class="page-header">物品ID查询</h1>
-                <input id="propId2Name" class="typeahead" type="text" placeholder="请输入物品或ID关键字">
-            </div>
-
-
         </div>
         <div class="col-md-3">
             <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
                 <ul class="nav bs-docs-sidenav">
 
                     <li>
-                        <a href="#serverInfo">服务器配置</a>
+                        <a href="#playerInfo">玩家属性</a>
                     </li>
                     <li>
-                        <a href="#excelSearch">配置表查询</a>
-
+                        <a href="#changeplayerInfo">数据修改</a>
                     </li>
-                    <li>
-                        <a href="#propId2NameSearch">物品ID查询</a>
 
-                    </li>
 
 
                 </ul>

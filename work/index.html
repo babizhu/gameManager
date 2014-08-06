@@ -37,44 +37,11 @@
 
     <script type="text/javascript" src="./js/urlParams.js"></script>
     <script type="text/javascript" src="./js/base.js"></script>
+    <script type="text/javascript" src="./js/typeahead.js/typeahead.bundle.min.js"></script>
     <script>
-
-
         $(document).ready(function ($) {
 
-
-            $("#refreshExcelBut").click(function () {
-                $("#refreshExcelBut").attr("disabled", true);
-                $("#refreshExcelResult").html( "<h4 class='bg-info'>正在运行，大约需要20秒，请耐心等候。。。。</h4>" );
-//
-//                var htmlobj = $.ajax(
-//                        {url: host + "ReloadConfig",
-//                            async:false
-//                        }
-//                );
-//                $("#refreshExcelResult").html(htmlobj.responseText);
-                var refreshExcelUrl = host + "ReloadConfig";
-                $.ajax({
-
-                    cache:false,
-                    dataType:"html",
-                    url: refreshExcelUrl,
-                    success: function(html){
-                        $("#refreshExcelResult").html(html);
-                        $("#refreshExcelBut").attr("disabled", false);
-                    },
-                    error: function(XMLHttpRequest , textStatus , errorThrown ){
-//                        if()
-//                        alert(XMLHttpRequest.status);
-//                        alert(XMLHttpRequest.readyState);
-//                        alert(textStatus);
-                        $("#refreshExcelResult").html( "<h4 class='bg-danger'>出错啦，请检查" + refreshExcelUrl +"是否可访问！</h4>");
-                        $("#refreshExcelBut").attr("disabled", false);
-                    }
-                });
-            });
         });
-
     </script>
 
 
@@ -118,9 +85,8 @@
 <!-- Docs page layout -->
 <div class="bs-docs-header" id="content">
     <div class="container">
-        <h1>数据管理</h1>
-
-        <p>可对游戏内数据进行一系列的管理</p>
+        <h1>服务器信息</h1>
+        <p>显示所有的开发服务器，请从这里进入功能界面</p>
 
     </div>
 </div>
@@ -130,38 +96,17 @@
     <div class="row">
         <div class="col-md-9" role="main">
             <div class="bs-docs-section">
-                <h1 id="refreshExcel" class="page-header">后端导表</h1>
+                <h1 id="playerInfo" class="page-header">开发服务器列表</h1>
 
-                <a class="btn btn-lg btn-primary btn-shadow" href="#" target="_blank" role="button"
-                   id="refreshExcelBut">开始导表</a>
-
-                <div id="refreshExcelResult"></div>
+                <h3><a href="./data.html?host=192.168.1.54:21523&hostName=LC3区&">LC3区</a></h3>
+                <!--<h3><a href="./data.html?host=192.168.1.54:21525&">LC私服</a></h3>-->
+                <h3><a href="./data.html?host=192.168.1.55:21524&hostName=LK4区&">LK4区</a></h3>
 
             </div>
-
-
-
-
         </div>
-        <div class="col-md-3">
-            <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
-                <ul class="nav bs-docs-sidenav">
-
-                    <li>
-                        <a href="#refreshExcel">后端导表</a>
-                    </li>
-
-
-
-                </ul>
-                <a class="back-to-top" href="#top">
-                    返回顶部
-                </a>
-
-            </div>
         </div>
     </div>
-</div>
+
 
 <!-- Footer
 ================================================== -->

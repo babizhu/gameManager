@@ -2,7 +2,7 @@ var host;
 var substringMatcher;
 $(document).ready(function ($) {
     $("#top a").each(function () {
-        $(this).attr("href", $(this).attr("href") + "?host=" + $.request.queryString["host"]);
+        $(this).attr("href", $(this).attr("href") + "?host=" + $.request.queryString["host"] + "&hostName=" + $.request.queryString["hostName"] +"&");
     });
 
     host = "http://" + $.request.queryString["host"] + "/";
