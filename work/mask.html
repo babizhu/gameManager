@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function ($) {
+
+        });
+
+    </script>
+    <style >
+        .thumbnail {
+            position:relative;
+            overflow:hidden;
+        }
+
+        .caption {
+            position:absolute;
+            top:-100%;
+            right:0;
+            background:rgba(66, 139, 202, 0.75);
+            width:100%;
+            height:100%;
+            padding:2%;
+            text-align:center;
+            color:#fff !important;
+            z-index:2;
+            -webkit-transition: all 0.5s ease-in-out;
+            -moz-transition: all 0.5s ease-in-out;
+            -o-transition: all 0.5s ease-in-out;
+            -ms-transition: all 0.5s ease-in-out;
+            transition: all 0.5s ease-in-out;
+        }
+        .thumbnail:hover .caption {
+            top:0%;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="row">
+        <div class="col-xs-6 col-sm-4 col-md-3">
+            <div class="thumbnail">
+                <div class="caption"  >
+                    <h4>Thumbnail Headline</h4>
+                    <p>short thumbnail description</p>
+                    <p><a href="" class="label label-danger">Zoom</a>
+                        <a href="" class="label label-default">Download</a></p>
+                </div>
+                <img src="http://lorempixel.com/400/300/sports/1/" alt="...">
+            </div>
+        </div>
+
+    </div>
+
+
+</div><!-- /.container -->
+</body>
+</html>
