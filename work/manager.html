@@ -37,6 +37,9 @@
 
     <script type="text/javascript" src="./js/urlParams.js"></script>
     <script type="text/javascript" src="./js/base.js"></script>
+    <!--[if lte IE 9]>
+    <script type='text/javascript' src='./js/jquery.xdomainrequest.min.js'></script>
+    <![endif]-->
     <script>
 
 
@@ -87,6 +90,12 @@
         <div class="navbar-header">
 
             <a href="./index.html" class="navbar-brand">步步封神</a>
+            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
@@ -100,15 +109,16 @@
                     <a href="./user.html">玩家信息</a>
                 </li>
                 <li>
-                    <a href="../javascript">JavaScript 插件</a>
+                    <a href="./tool.html">工具插件</a>
                 </li>
                 <li>
                     <a href="../customize">定制</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">优站精选</a></li>
+                <li><a href="http://192.168.1.36/server.html">BUG系统</a></li>
                 <li><a href="#">官方博客</a></li>
+                <li><a href="#" id="hostName">请选择服务区</a></li>
             </ul>
         </nav>
     </div>

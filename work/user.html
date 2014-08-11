@@ -38,12 +38,13 @@
     <script type="text/javascript" src="./js/urlParams.js"></script>
     <script type="text/javascript" src="./js/base.js"></script>
     <script type="text/javascript" src="./js/typeahead.js/typeahead.bundle.min.js"></script>
+    <!--[if lte IE 9]>
+    <script type='text/javascript' src='./js/jquery.xdomainrequest.min.js'></script>
+    <![endif]-->
     <script>
 
 
         $(document).ready(function ($) {
-
-
             $.getScript(host + "PropId2Name", function () {
                 $('#propId2Name').typeahead({
                             hint: true,
@@ -53,32 +54,86 @@
                         {
                             name: 'prop',
                             displayKey: 'value',
-                            source: substringMatcher(propName)
+                            source: substringMatcher(propName, 15)
                         });
             });
-
+//            jQuery.support.cors = true;
             $("#changePlayerInfoBut").click(function () {
-                $("#changePlayerInfoResult").html( "<h4 class='bg-info'>正在提交，请耐心等候。。。。</h4>" );
 //
                 var changePlayerInfoUrl = host + "ChangePlayerInfo?";
-                changePlayerInfoUrl += "user_id=" + $("#user").val();
-                changePlayerInfoUrl += "&propId=" + $("#propId2Name").val().substr(0,6);
+                changePlayerInfoUrl += "propId=" + $("#propId2Name").val().substr(0, 6);
                 changePlayerInfoUrl += "&count=" + $("#count").val();
-//                alert(changePlayerInfoUrl);
-                $.ajax({
-                    cache:false,
-                    dataType:"html",
-                    url: changePlayerInfoUrl,
-                    success: function(html){
-                        $("#changePlayerInfoResult").html(html);
+//
+                submit(changePlayerInfoUrl, $("#changePlayerInfoResult"));
+            });
 
+//            $("#yunyouBut").click(function(){
+//                var ChangePlayerMiscUrl = host + "ChangePlayerMisc?";
+//                ChangePlayerMiscUrl += "cmd=yunyou";
+//                submit(ChangePlayerMiscUrl,$("#miscResult"));
+//            });
+//            $("#moshenBut").click(function(){
+//                var ChangePlayerMiscUrl = host + "ChangePlayerMisc?";
+//                ChangePlayerMiscUrl += "cmd=moshen";//
+//                submit(ChangePlayerMiscUrl,$("#miscResult"));
+//            });
+//            $("#skipGuideBut").click(function(){
+//                var ChangePlayerMiscUrl = host + "ChangePlayerMisc?";
+//                ChangePlayerMiscUrl += "cmd=skipGuide";//
+//                submit(ChangePlayerMiscUrl,$("#miscResult"));
+//            });
+//            $("#superPlayerBut").click(function(){
+//                var ChangePlayerMiscUrl = host + "ChangePlayerMisc?";
+//                ChangePlayerMiscUrl += "cmd=superPlayer";//
+//                submit(ChangePlayerMiscUrl,$("#miscResult"));
+//            });
+//            $("#rechargeBut").click(function(){
+//                var ChangePlayerMiscUrl = host + "ChangePlayerMisc?";
+//                ChangePlayerMiscUrl += "cmd=recharge&";//
+//                submit(ChangePlayerMiscUrl,$("#miscResult"));
+//            });
+
+            /**
+             * 杂项提交
+             */
+            function submit(url, resultDiv) {
+//                alert( cmd);
+                resultDiv.html("<h4 class='bg-info'>正在提交，请耐心等候。。。。</h4>");//
+                url += "&user_id=" + $("#user").val() + "&";
+                $.ajax({
+                    cache: false,
+                    dataType: "html",
+                    crossDomain: true,
+                    url: url,
+                    success: function (html) {
+                        resultDiv.html(html);
                     },
-                    error: function(XMLHttpRequest , textStatus , errorThrown ){
-                        $("#changePlayerInfoResult").html( "<h4 class='bg-danger'>出错啦，请检查" + changePlayerInfoUrl +"是否可访问！</h4>");
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        // alert(XMLHttpRequest.responseText);
+                        resultDiv.html("<h4 class='bg-danger'>出错啦，请检查" + url + "是否可访问！</h4>");
                     }
                 });
+            };
+
+            $("#miscChange a").click(function () {
+                if ($(this).attr("role") == "button") {
+                    var cmd = $(this).attr("cmd");
+                    var argField = $(this).attr("argField");//关联参数所在的输入框的id，比如充值的数量输入框id就放在这里
+                    var arg="";
+                    if( argField != undefined ){
+                        arg = $("#" + argField).val();
+                    }
+                    var url = host + "ChangePlayerMisc?cmd=" + cmd + "&arg=" + arg;
+//                    alert(url);
+                    submit(url, $("#miscResult"));
+                }
+
             });
         });
+
+
+        //        alert($("#content").text() );
+
 
     </script>
 
@@ -91,6 +146,13 @@
     <div class="container">
         <div class="navbar-header">
             <a href="./index.html" class="navbar-brand">步步封神</a>
+            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
+                    data-target=".bs-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
@@ -104,15 +166,16 @@
                     <a href="./user.html">玩家信息</a>
                 </li>
                 <li>
-                    <a href="../javascript">JavaScript 插件</a>
+                    <a href="./tool.html">工具插件</a>
                 </li>
                 <li>
                     <a href="../customize">定制</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">优站精选</a></li>
+                <li><a href="http://192.168.1.36/server.html">BUG系统</a></li>
                 <li><a href="#">官方博客</a></li>
+                <li><a href="#" id="hostName">请选择服务区</a></li>
             </ul>
         </nav>
     </div>
@@ -123,6 +186,7 @@
 <div class="bs-docs-header" id="content">
     <div class="container">
         <h1>玩家信息</h1>
+
         <p>管理玩家的个人信息，包括查询和修改</p>
 
     </div>
@@ -137,7 +201,7 @@
 
                 <div class="row">
                     <div class="col-xs-8">
-                        <input id="user" type="text" placeholder="请输入玩家的用户名或昵称" class="form-control " >
+                        <input id="user" type="text" placeholder="请输入玩家的用户名或昵称" class="form-control ">
                     </div>
                     <div class="col-xs-3">
                         <button type="button" class="btn btn-sm btn-success" id="searchUserBut">提交</button>
@@ -163,18 +227,15 @@
                         <td id="port">54</td>
                     </tr>
 
-
                     </tbody>
                 </table>
             </div>
-
             <div class="bs-docs-section">
                 <h1 id="changeplayerInfo" class="page-header">数据修改</h1>
 
-
                 <form class="form-inline" role="form">
                     <div class="col-xs-8">
-                        <input id="propId2Name" type="text" placeholder="请输入物品或者ID关键字" class="form-control " >
+                        <input id="propId2Name" type="text" placeholder="请输入物品或者ID关键字" class="form-control ">
                     </div>
                     <div class="col-xs-3">
                         <div class="input-group">
@@ -187,8 +248,27 @@
                     </div>
                 </form>
                 <br><br>
+
                 <div class="col-xs-12" id="changePlayerInfoResult"></div>
             </div>
+            <div class="bs-docs-section" id="miscChange">
+                <div class="form-inline">
+                    <h1 id="misc" class="page-header">杂项修改</h1>
+                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="yunyouBut" cmd="yunyou">生成云游仙人</a>
+                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="moshenBut"  cmd="moshen">生成魔神</a>
+                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="skipGuideBut"  cmd="skipGuide">跳过引导</a>
+                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="superPlayerBut" cmd="superPlayer">超级账号</a>
+                </div>
+                <br>
+
+                <div class="form-inline">
+                    <input id="rechargeCount" type="text" class="form-control" placeholder="请输入充值元宝数">
+                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="rechargeBut" cmd="recharge" argField="rechargeCount">模拟充值</a>
+                </div>
+
+                <div id="miscResult"></div>
+            </div>
+
         </div>
         <div class="col-md-3">
             <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
@@ -200,7 +280,9 @@
                     <li>
                         <a href="#changeplayerInfo">数据修改</a>
                     </li>
-
+                    <li>
+                        <a href="#misc">杂项修改</a>
+                    </li>
 
 
                 </ul>
@@ -210,6 +292,7 @@
 
             </div>
         </div>
+
     </div>
 </div>
 

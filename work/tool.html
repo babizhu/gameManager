@@ -41,8 +41,25 @@
     <!--[if lte IE 9]>
     <script type='text/javascript' src='./js/jquery.xdomainrequest.min.js'></script>
     <![endif]-->
+
     <script>
         $(document).ready(function ($) {
+
+            $("#buildUpdateMailBut").click(function () {
+                var fileName = $("#updateFileName").val();
+                if( fileName.length != "bbfs_server_full_v1.0.0.1_2014-08-06-191800_63e8aa43cba191156426b3e413d32d85".length ){
+                    alert("文件格式不匹配");
+                    return;
+                }
+                var text = $("#updateMailResult").html();
+                //alert( fileName )
+                text = text.replace("#v#", fileName.substr( fileName.indexOf("v1"), 26));
+                text = text.replace("#date#", fileName.substr( 26, 10));
+                text = text.replace("#file#", fileName.substr(0, fileName.lastIndexOf("_")));
+                text = text.replace("#md5#", fileName.substr(fileName.lastIndexOf("_")+1, fileName.length));
+                $("#updateMailResult").html( text );
+
+            });
 
         });
     </script>
@@ -78,7 +95,7 @@
                     <a href="./tool.html">工具插件</a>
                 </li>
                 <li>
-                    <a href="../customize">定制</a>
+                    <a href="./customize">定制</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -94,8 +111,8 @@
 <!-- Docs page layout -->
 <div class="bs-docs-header" id="content">
     <div class="container">
-        <h1>服务器信息</h1>
-        <p>显示所有的开发服务器，请从这里进入功能界面</p>
+        <h1>工具插件</h1>
+        <p>一些游戏相关的小工具</p>
 
     </div>
 </div>
@@ -105,13 +122,39 @@
     <div class="row">
         <div class="col-md-9" role="main">
             <div class="bs-docs-section">
-                <h1 id="playerInfo" class="page-header">开发服务器列表</h1>
+                <h1 id="playerInfo" class="page-header">更新邮件</h1>
 
-                <h3><a href="./data.html?host=192.168.1.54:21523&hostName=LC3区&">LC3区</a></h3>
-                <!--<h3><a href="./data.html?host=192.168.1.54:21525&">LC私服</a></h3>-->
-                <h3><a href="./data.html?host=192.168.1.55:21524&hostName=LK4区&">LK4区</a></h3>
+                <form class="form-horizontal" role="form">
+                    <label class="control-label col-sm-2" for="updateFileName">更新包地址</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="updateFileName" placeholder="bbfs_server_full_v1.0.0.1_2014-08-06-191800_63e8aa43cba191156426b3e413d32d85">
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" class="btn btn-sm btn-success" id="buildUpdateMailBut">提交</button>
+                    </div>
+                </form>
+                <br><br>
+                <div class="col-xs-12" id="updateMailResult" font-color="red">
+                    <p>版本发布：《天天爱封神》服务器#v#</p><br>
+                    <p>肖兄好！</p>
+                    <p>以下为《天天爱封神》#date#更新</p>
+
+                    <h3>服务器更新：</h3>
+                    <h4><li>文件位置：</li></h4>
+                    <font color="blue">/server/public/</font>
+
+                    <br><h4><li>更新包名：</li></h4>
+                    <font color="blue">#file#.zip</font>
+
+                    <br><h4><li>文件MD5：</li></h4>
+                    <font color="blue">#md5#</font>
+
+
+                    <br><h4><li>注意事项：</li></h4>
+                      解压覆盖之后，重新启动服务器即可</div>
 
             </div>
+
         </div>
         </div>
     </div>
