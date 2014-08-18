@@ -45,7 +45,8 @@
 
     <script>
         $(document).ready(function ($) {
-            $.getScript(host + "ExcelFile", function () {
+            //考虑到外网linux服务器没有excel文件，这里干脆写死ip地址算了
+            $.getScript("http://192.168.1.55:21524/" + "ExcelFile", function () {
                 $('#excel').typeahead({
                     hint: true,
                     highlight: true,
@@ -77,6 +78,36 @@
                 $('#erating').text(erating);
                 $('#rechargePort').text(rechargePort);
             });
+
+           function refreshServerInfo(){
+//               alert(3)
+               $.ajax({
+                   url: host + "WatchInfo",
+                   cache: false,
+                   dataType: "html",
+                   crossDomain: true,
+                   success: function (data) {
+                       var ip = $.request.queryString["host"];
+                       $('#serverIp').text(ip.substr(0,ip.indexOf(":")));
+                       var info = data.split(",");//",分隔的各种数据"
+
+                       $('#playerCount').text(info[0]);
+                       $('#rechargeCount').text(info[1]);
+                       $('#rechargeAmount').text(info[2] + "元宝");
+                       $('#runSecond').text(transfomDataToDHS(info[3]));
+                       $('#historyOnline').text(info[4]);
+                       $('#registerCount').text(info[5]);//所有的后端不更新，这里会报错，所以先不管
+                   },
+                   error: function (XMLHttpRequest, textStatus, errorThrown) {
+                       if(XMLHttpRequest.responseText != "")
+                       alert(XMLHttpRequest.responseText);
+                       //resultDiv.html("<h4 class='bg-danger'>出错啦，请检查" + url + "是否可访问！</h4>");
+                   }
+               });
+            }
+
+            setInterval(refreshServerInfo,10000);
+            refreshServerInfo();
 
             $.getScript(host + "PropId2Name", function () {
                 $('#propId2Name').typeahead({
@@ -130,7 +161,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="http://192.168.1.36/server.html">BUG系统</a></li>
                 <li><a href="#">官方博客</a></li>
-                <li><a href="#" id="hostName">请选择服务区</a></li>
+                <li><a href="#" id="hostName" style="color: red">请选择服务区</a></li>
             </ul>
         </nav>
     </div>
@@ -142,7 +173,7 @@
     <div class="container">
         <h1>数据查询</h1>
 
-        <p>这是一个对游戏进行全方位管理的web平台</p>
+        <p>对服务器的各种参数数据进行查询</p>
 
     </div>
 </div>
@@ -152,6 +183,52 @@
     <div class="row">
         <div class="col-md-9" role="main">
             <div class="bs-docs-section">
+                <h1 id="runInfo" class="page-header">运行状态</h1>
+
+                <table class="table table-striped">
+
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th width="60%">值</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td>服务器IP</td>
+                        <td id="serverIp"></td>
+                    </tr>
+
+                    <tr>
+                        <td>当前人数</td>
+                        <td id="playerCount"></td>
+                    </tr>
+                    <tr>
+                        <td>充值单数</td>
+                        <td id="rechargeCount"></td>
+                    </tr>
+                    <tr>
+                        <td>充值额度</td>
+                        <td id="rechargeAmount"></td>
+                    </tr>
+                    <tr>
+                        <td>运行时长</td>
+                        <td id="runSecond"></td>
+                    </tr>
+                    <tr>
+                        <td>注册人数</td>
+                        <td id="registerCount"></td>
+                    </tr>
+                    <tr>
+                        <td>历史最高在线</td>
+                        <td id="historyOnline"></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="bs-docs-section">
                 <h1 id="serverInfo" class="page-header">服务器配置</h1>
 
                 <table class="table table-striped">
@@ -159,7 +236,7 @@
                     <thead>
                     <tr>
                         <th>名称</th>
-                        <th>值</th>
+                        <th  width="60%">值</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -187,6 +264,7 @@
                         <td>数据库路径</td>
                         <td id="dbPath"></td>
                     </tr>
+
                     <tr>
                         <td>erating</td>
                         <td id="erating"></td>
@@ -195,6 +273,7 @@
                     </tbody>
                 </table>
             </div>
+
 
             <div class="bs-docs-section">
                 <h1 id="excelSearch" class="page-header">配置表查询</h1>
@@ -212,7 +291,9 @@
         <div class="col-md-3">
             <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
                 <ul class="nav bs-docs-sidenav">
-
+                    <li>
+                        <a href="#runInfo">运行状态</a>
+                    </li>
                     <li>
                         <a href="#serverInfo">服务器配置</a>
                     </li>

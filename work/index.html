@@ -55,7 +55,8 @@
 <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
     <div class="container">
         <div class="navbar-header">
-            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
+                    data-target=".bs-navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -68,7 +69,7 @@
                 <li>
                     <a href="./data.html">数据查询</a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="./manager.html">数据管理</a>
                 </li>
                 <li>
@@ -84,7 +85,29 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="http://192.168.1.36/server.html">BUG系统</a></li>
                 <li><a href="#">官方博客</a></li>
-                <li><a href="#" id="hostName">请选择服务区</a></li>
+                <li>
+
+                    <a id="dLabel" data-target="#" href="http://example.com" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        请选择服务区
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" id="serverListMenu">
+                        <li role="presentation"><a role="menuitem"
+                                                   href="data.html?host=192.168.1.54:21523&hostName=LC3区&">LC3区</a></li>
+                        <!--<li role="presentation"><a href="./data.html?host=192.168.1.54:21525&">LC私服</a></li>-->
+                        <li role="presentation"><a role="menuitem"
+                                                   href="data.html?host=192.168.1.55:21524&hostName=LK4区&">LK4区</a></li>
+                        <li role="presentation"><a role="menuitem"
+                                                   href="data.html?host=115.182.54.220:21511&hostName=联调服务器&">联调服务器</a>
+                        </li>
+                        <li role="presentation"><a role="menuitem"
+                                                   href="data.html?host=42.62.9.127:21508&hostName=盘古开天&"
+                                                   style="color: red">盘古开天</a></li>
+
+                    </ul>
+                </li>
+
             </ul>
         </nav>
     </div>
@@ -95,6 +118,7 @@
 <div class="bs-docs-header" id="content">
     <div class="container">
         <h1>服务器信息</h1>
+
         <p>显示所有的开发服务器，请从这里进入功能界面</p>
 
     </div>
@@ -111,10 +135,15 @@
                 <!--<h3><a href="./data.html?host=192.168.1.54:21525&">LC私服</a></h3>-->
                 <h3><a href="./data.html?host=192.168.1.55:21524&hostName=LK4区&">LK4区</a></h3>
 
+                <h3><a href="./data.html?host=115.182.54.220:21511&hostName=联调服务器&">联调服务器</a></h3>
+
+                <h3><a href="./data.html?host=42.62.9.127:21508&hostName=盘古开天&" style="color: red">盘古开天</a></h3>
+
+
             </div>
         </div>
-        </div>
     </div>
+</div>
 
 
 <!-- Footer

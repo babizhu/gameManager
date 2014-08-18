@@ -14,7 +14,7 @@
 
 
     <!-- Bootstrap core CSS -->
-    <link href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://v3.bootcss.com/assets/css/patch.css" rel="stylesheet">
     <!-- Documentation extras -->
     <link href="http://v3.bootcss.com/assets/css/docs.min.css" rel="stylesheet">
@@ -119,16 +119,47 @@
                 if ($(this).attr("role") == "button") {
                     var cmd = $(this).attr("cmd");
                     var argField = $(this).attr("argField");//关联参数所在的输入框的id，比如充值的数量输入框id就放在这里
-                    var arg="";
-                    if( argField != undefined ){
+                    var arg = "";
+                    if (argField != undefined) {
                         arg = $("#" + argField).val();
                     }
                     var url = host + "ChangePlayerMisc?cmd=" + cmd + "&arg=" + arg;
 //                    alert(url);
                     submit(url, $("#miscResult"));
                 }
+            });
+
+            $("#searchUserBut").click(function () {
+                var url = host + "QueryUserInfoBase1?";
+                var userName = $("#user").val()
+                url += "user_id=" + userName + "&";
+//                url +=
+                $('#userInfo tr').empty();
+                $.ajax({
+                    url: url,
+                    dataType: 'xml',
+                    success: function (data) {
+
+//                        alert($(data).find("Response").text())
+                        if ($(data).find("Response").text() == "-1201") {
+                            $('#userInfo').append('<tr><td>错误</td><td width=70%>玩家【' + userName + '】不存在</td></tr>');
+                            return
+                        }
+                        $(data).find("details_info").each(function (index, ele) {
+
+//
+                            var val = $(this).children('info').text();
+                            var userInfo = val.split(",");
+                            var splitLen = userInfo.length / 2;
+                            for (i = 0; i < splitLen; i++) {//
+                                $('#userInfo').append('<tr><td>' + userInfo[i] + '</td><td width=70% style="WORD-WRAP: break-word">' + userInfo[splitLen + i] + '</td></tr>');
+                            }
+                        });
+                    }
+                });
 
             });
+
         });
 
 
@@ -159,10 +190,10 @@
                 <li>
                     <a href="./data.html">数据查询</a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="./manager.html">数据管理</a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="./user.html">玩家信息</a>
                 </li>
                 <li>
@@ -175,7 +206,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="http://192.168.1.36/server.html">BUG系统</a></li>
                 <li><a href="#">官方博客</a></li>
-                <li><a href="#" id="hostName">请选择服务区</a></li>
+                <li><a href="#" id="hostName" style="color: red">请选择服务区</a></li>
             </ul>
         </nav>
     </div>
@@ -210,24 +241,8 @@
                 </div>
 
                 <br><br>
-                <table class="table table-striped">
+                <table class="table table-striped" id="userInfo"  style="TABLE-LAYOUT: fixed">
 
-
-                    <tbody>
-                    <tr>
-                        <td>昵称</td>
-                        <td id="gameId">刘老爷</td>
-                    </tr>
-                    <tr>
-                        <td>经验</td>
-                        <td id="serverName">64645435</td>
-                    </tr>
-                    <tr>
-                        <td>等级</td>
-                        <td id="port">54</td>
-                    </tr>
-
-                    </tbody>
                 </table>
             </div>
             <div class="bs-docs-section">
@@ -255,15 +270,19 @@
                 <div class="form-inline">
                     <h1 id="misc" class="page-header">杂项修改</h1>
                     <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="yunyouBut" cmd="yunyou">生成云游仙人</a>
-                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="moshenBut"  cmd="moshen">生成魔神</a>
-                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="skipGuideBut"  cmd="skipGuide">跳过引导</a>
-                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="superPlayerBut" cmd="superPlayer">超级账号</a>
+                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="moshenBut"
+                       cmd="moshen">生成魔神</a>
+                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="skipGuideBut"
+                       cmd="skipGuide">跳过引导</a>
+                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="superPlayerBut"
+                       cmd="superPlayer">超级账号</a>
                 </div>
                 <br>
 
                 <div class="form-inline">
                     <input id="rechargeCount" type="text" class="form-control" placeholder="请输入充值元宝数">
-                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="rechargeBut" cmd="recharge" argField="rechargeCount">模拟充值</a>
+                    <a class="btn btn-sm btn-primary btn-shadow" href="#" role="button" id="rechargeBut" cmd="recharge"
+                       argField="rechargeCount">模拟充值</a>
                 </div>
 
                 <div id="miscResult"></div>
