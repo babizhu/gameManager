@@ -137,7 +137,14 @@
                 $('#userInfo tr').empty();
                 $.ajax({
                     url: url,
-                    dataType: 'xml',
+                    dataType: 'xml',//<?xml version="1.0" encoding="utf-8"?>
+                    // <Response>
+                    // <result>1</result>
+                    // <details_info>
+                    // <info id='1'>用户名,昵称,ip,等级,vip等级,体力,精力,元宝（充值元宝）,金锭,</info>
+                    // <info id='2'>hbs82,逄行芮,192.168.1.55,33,2,41,12,14(100),0</info>
+                    // </details_info>
+                    // </Response>
                     success: function (data) {
 
 //                        alert($(data).find("Response").text())
